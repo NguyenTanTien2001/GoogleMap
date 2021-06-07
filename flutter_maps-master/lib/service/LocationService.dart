@@ -21,8 +21,12 @@ class LocationService {
   double destinationLatitude = 0.0;
   double destinationLongitude = 0.0;
 
+  //search place
+  double findedLatitude = 0.0;
+  double findedLongitude = 0.0;
+
   //Create and place the marker on the map
-  Future<bool> makeMarker(
+  Future<bool> makeMarkers(
     String startAddress,
     String destinationAddress,
     String currentAddress,
@@ -155,5 +159,59 @@ class LocationService {
         c((lat2 - lat1) * p) / 2 +
         c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a));
+  }
+
+  //find a place and make marker
+  Future<bool> makeMarker(String placeName, String findedAddress,
+      GoogleMapController mapController) async {
+    final mapViewController = Get.find<MapviewController>();
+    List<Location> findedPlacemark = await locationFromAddress(placeName);
+    if (findedPlacemark.isNotEmpty) {
+      findedLatitude = findedPlacemark[0].latitude;
+      findedLongitude = findedPlacemark[0].longitude;
+      String findedCoordinatesString = '($findedLatitude, $findedLongitude)';
+
+      Marker findedMarker = Marker(
+        markerId: MarkerId(findedCoordinatesString),
+        position: LatLng(findedLatitude, findedLongitude),
+        infoWindow: InfoWindow(
+          title: '$findedCoordinatesString',
+          snippet: findedAddress,
+        ),
+        icon: BitmapDescriptor.defaultMarker,
+      );
+
+      mapViewController.markers.add(findedMarker);
+
+      print(
+        'FINDED COORDINATES: ($findedLatitude, $findedLongitude)',
+      );
+
+      camService.cameraPositionUpdate(
+          mapController, findedLatitude, findedLongitude, 18.0);
+
+      return true;
+    } else
+      return false;
+  }
+
+  Future<void> pointMarker(
+      String pointAddress, double latitude, double longitude) async {
+    final mapViewController = Get.find<MapviewController>();
+    Marker pointMarker = Marker(
+      markerId: MarkerId("($latitude, $longitude)"),
+      position: LatLng(latitude, longitude),
+      infoWindow: InfoWindow(
+        title: '($latitude, $longitude)',
+        snippet: pointAddress,
+      ),
+      icon: BitmapDescriptor.defaultMarker,
+    );
+
+    mapViewController.markers.add(pointMarker);
+
+    print(
+      'POINT COORDINATES: ($findedLatitude, $findedLongitude)',
+    );
   }
 }

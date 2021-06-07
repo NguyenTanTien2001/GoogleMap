@@ -6,10 +6,14 @@ import 'dart:convert' as convert;
 class PlacesService {
   Future<List<PlaceSearch>> getAutocomplete(String search) async {
     var url =
-        "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$search&key=${Secrets.API_KEY}&sessiontoken=1234567890";
+        "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$search&key=${Secrets.API_KEY}";
     var response = await http.get(Uri.parse(url));
-    var json = convert.jsonDecode(response.body);
-    var jsonResult = json['predictions'] as List;
-    return jsonResult.map((place) => PlaceSearch.fromJson(place)).toList();
+    if (response.statusCode == 200) {
+      var json = convert.jsonDecode(response.body);
+      var jsonResult = json['predictions'] as List;
+      return jsonResult.map((place) => PlaceSearch.fromJson(place)).toList();
+    } else {
+      throw Exception();
+    }
   }
 }

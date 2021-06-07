@@ -34,7 +34,8 @@ class MapSetting extends StatelessWidget {
                   ),
                   SizedBox(width: 10.0),
                   Container(
-                    child: DropdownButton(
+                      child: Obx(
+                    () => DropdownButton(
                       value: mapViewController.mapType.value,
                       onChanged: (MapType? newValue) {
                         mapViewController.mapType.value = newValue!;
@@ -48,7 +49,7 @@ class MapSetting extends StatelessWidget {
                             ));
                       }).toList(),
                     ),
-                  )
+                  ))
                 ],
               ),
             ],

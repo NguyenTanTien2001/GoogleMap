@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_maps/MapView/Controller/MapViewController.dart';
-import 'package:flutter_maps/model/place_search.dart';
 import 'package:flutter_maps/service/Places_Service.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_maps/MapView/Controller/MapViewController.dart';
 import 'package:flutter_maps/MapView/View/MapSetting.dart';
+import 'package:flutter_maps/model/place_search.dart';
 import 'package:flutter_maps/service/CameraService.dart';
 import 'package:flutter_maps/service/GoogleMapService.dart';
 import 'package:flutter_maps/service/LocationService.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -60,12 +62,69 @@ class MapView extends StatelessWidget {
                   onMapCreated: (GoogleMapController controller) {
                     mapViewController.mapController = controller;
                   },
+                  onLongPress: mapViewController.addMarker,
+                ),
+              ),
+              //searchBar
+              SafeArea(
+                child: Container(
+                  padding: EdgeInsets.only(left: 16, right: 16),
+                  child: TypeAheadField<PlaceSearch?>(
+                    debounceDuration: Duration(microseconds: 500),
+                    textFieldConfiguration: TextFieldConfiguration(
+                        onChanged: (Value) {
+                          mapViewController.findedAddress.value = Value;
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: IconButton(
+                            icon: Icon(Icons.search),
+                            onPressed: () async {
+                              if (await mapViewController.findPlace(
+                                  mapViewController.findedAddress.value)) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Place finded"),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Can't find place"),
+                                  ),
+                                );
+                              }
+                              //Todo
+                            },
+                          ),
+                        ),
+                        style: TextStyle(fontSize: 24)),
+                    suggestionsBoxDecoration: SuggestionsBoxDecoration(),
+                    suggestionsCallback: placeService.getAutocomplete,
+                    itemBuilder: (context, PlaceSearch? suggestion) {
+                      final place = suggestion;
+                      return ListTile(
+                        title: Text(place!.description),
+                      );
+                    },
+                    noItemsFoundBuilder: (context) {
+                      return Container(
+                        height: 50,
+                        child: Center(
+                          child: Text(
+                            "No Places Found!",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      );
+                    },
+                    onSuggestionSelected: (places) => {},
+                  ),
                 ),
               ),
               // Show zoom buttons
               Positioned(
-                left: 12,
-                top: 12,
+                right: 12,
+                top: 100,
                 child: SafeArea(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
