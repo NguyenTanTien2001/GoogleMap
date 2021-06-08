@@ -166,6 +166,8 @@ class LocationService {
       GoogleMapController mapController) async {
     final mapViewController = Get.find<MapviewController>();
     List<Location> findedPlacemark = await locationFromAddress(placeName);
+    print(
+        "FindPlaceMent: ${findedPlacemark[0].latitude}, ${findedPlacemark[0].longitude}");
     if (findedPlacemark.isNotEmpty) {
       findedLatitude = findedPlacemark[0].latitude;
       findedLongitude = findedPlacemark[0].longitude;

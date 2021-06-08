@@ -117,21 +117,22 @@ class MapviewController extends GetxController {
   }
 
   Future<bool> findPlace(String placeName) async {
-    if (markers.isNotEmpty) {
-      markers.clear();
+    print(placeName);
+    if (placeName != "") {
+      if (markers.isNotEmpty) {
+        markers.clear();
+      }
+      if (polylines.isNotEmpty) {
+        polylines.clear();
+      }
+      if (polylineCoordinates.isNotEmpty) {
+        polylineCoordinates.clear();
+      }
+      placeDistance.value = "";
+      if (await locationService.makeMarker(
+          placeName, findedAddress.value, mapController)) return true;
     }
-    if (polylines.isNotEmpty) {
-      polylines.clear();
-    }
-    if (polylineCoordinates.isNotEmpty) {
-      polylineCoordinates.clear();
-    }
-    placeDistance.value = "";
-    if (await locationService.makeMarker(
-        placeName, findedAddress.value, mapController))
-      return true;
-    else
-      return false;
+    return false;
   }
 
   Future<void> addMarker(LatLng pos) async {

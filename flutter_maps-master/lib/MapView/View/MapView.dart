@@ -25,6 +25,7 @@ class MapView extends StatelessWidget {
   final panelController = PanelController();
 
   @override
+  // ignore: override_on_non_overriding_member
   void initState() {
     mapViewController.getCurrentLocation();
   }
@@ -67,58 +68,59 @@ class MapView extends StatelessWidget {
               ),
               //searchBar
               SafeArea(
-                child: Container(
-                  padding: EdgeInsets.only(left: 16, right: 16),
-                  child: TypeAheadField<PlaceSearch?>(
-                    debounceDuration: Duration(microseconds: 500),
-                    textFieldConfiguration: TextFieldConfiguration(
-                        onChanged: (Value) {
-                          mapViewController.findedAddress.value = Value;
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: IconButton(
-                            icon: Icon(Icons.search),
-                            onPressed: () async {
-                              if (await mapViewController.findPlace(
-                                  mapViewController.findedAddress.value)) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text("Place finded"),
-                                  ),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text("Can't find place"),
-                                  ),
-                                );
-                              }
-                              //Todo
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () async {
+                        if (await mapViewController
+                            .findPlace(mapViewController.findedAddress.value)) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Place finded"),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Can't find place"),
+                            ),
+                          );
+                        }
+                        //Todo
+                      },
+                    ),
+                    Expanded(
+                      child: TypeAheadField<PlaceSearch?>(
+                        debounceDuration: Duration(microseconds: 500),
+                        textFieldConfiguration: TextFieldConfiguration(
+                            onChanged: (value) {
+                              mapViewController.findedAddress.value = value;
                             },
-                          ),
-                        ),
-                        style: TextStyle(fontSize: 24)),
-                    suggestionsBoxDecoration: SuggestionsBoxDecoration(),
-                    suggestionsCallback: placeService.getAutocomplete,
-                    itemBuilder: (context, PlaceSearch? suggestion) {
-                      final place = suggestion;
-                      return ListTile(
-                        title: Text(place!.description),
-                      );
-                    },
-                    noItemsFoundBuilder: (context) {
-                      return Container(
-                        height: 50,
-                        child: Center(
-                          child: Text(
-                            "No Places Found!",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                      );
-                    },
-                    onSuggestionSelected: (places) => {},
-                  ),
+                            style: TextStyle(fontSize: 24)),
+                        suggestionsBoxDecoration: SuggestionsBoxDecoration(),
+                        suggestionsCallback: placeService.getAutocomplete,
+                        itemBuilder: (context, PlaceSearch? suggestion) {
+                          final place = suggestion;
+                          return ListTile(
+                            title: Text(place!.description),
+                          );
+                        },
+                        noItemsFoundBuilder: (context) {
+                          return Container(
+                            height: 50,
+                            child: Center(
+                              child: Text(
+                                "No Places Found!",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          );
+                        },
+                        onSuggestionSelected: (places) => {},
+                      ),
+                    ),
+                  ],
                 ),
               ),
               // Show zoom buttons

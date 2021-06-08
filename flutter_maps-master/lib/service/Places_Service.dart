@@ -13,7 +13,7 @@ class PlacesService {
       var jsonResult = json['predictions'] as List;
       return jsonResult.map((place) => PlaceSearch.fromJson(place)).toList();
     } else {
-      throw Exception();
+      throw Exception(response.body);
     }
   }
 }
