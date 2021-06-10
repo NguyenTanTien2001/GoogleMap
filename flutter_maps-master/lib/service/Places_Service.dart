@@ -6,7 +6,7 @@ import 'dart:convert' as convert;
 class PlacesService {
   Future<List<PlaceSearch>> getAutocomplete(String search) async {
     var url =
-        "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$search&key=${Secrets.API_KEY}";
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$search&types=(cities)&key=${Secrets.API_KEY}';
     var response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       var json = convert.jsonDecode(response.body);

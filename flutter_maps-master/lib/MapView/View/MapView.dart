@@ -117,7 +117,10 @@ class MapView extends StatelessWidget {
                             ),
                           );
                         },
-                        onSuggestionSelected: (places) => {},
+                        onSuggestionSelected: (places) => {
+                          mapViewController.findedAddress.value =
+                              places!.description
+                        },
                       ),
                     ),
                   ],
@@ -188,17 +191,6 @@ class MapView extends StatelessWidget {
                       ),
                       onTap: () async {
                         await mapViewController.getCurrentLocation();
-                        mapViewController.mapController.animateCamera(
-                          CameraUpdate.newCameraPosition(
-                            CameraPosition(
-                              target: LatLng(
-                                mapViewController.currentPosition.latitude,
-                                mapViewController.currentPosition.longitude,
-                              ),
-                              zoom: 18.0,
-                            ),
-                          ),
-                        );
                       },
                     ),
                   ),

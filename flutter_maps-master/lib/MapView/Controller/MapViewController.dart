@@ -129,8 +129,8 @@ class MapviewController extends GetxController {
         polylineCoordinates.clear();
       }
       placeDistance.value = "";
-      if (await locationService.makeMarker(
-          placeName, findedAddress.value, mapController)) return true;
+      if (await locationService.makeMarker(placeName, mapController))
+        return true;
     }
     return false;
   }

@@ -94,41 +94,27 @@ class MenuView extends StatelessWidget {
                   children: <Widget>[
                     SizedBox(height: 10),
                     Obx(() => _textField(
-                            label: 'Start',
-                            hint: 'Choose starting point',
-                            prefixIcon: Icon(Icons.looks_one),
-                            suffixIcon: IconButton(
-                              icon: Icon(Icons.my_location),
-                              onPressed: () {
-                                mapViewController
-                                        .startAddressController.value.text =
-                                    mapViewController.currentAddress.value;
-                                mapViewController.startAddress.value =
-                                    mapViewController.currentAddress.value;
-                                print(mapViewController.currentAddress);
-                              },
-                            ),
-                            controller:
-                                mapViewController.startAddressController.value,
-                            focusNode: mapViewController.startAddressFocusNode,
-                            width: width,
-                            locationCallback: (String value) {
-                              mapViewController.startAddress.value = value;
-                              //mapViewController.findPlace(value);
-                            })
-                        /*TypeAheadField<PlaceSearch?>(
-                            suggestionsCallback: placeService.getAutocomplete,
-                            itemBuilder: (context, PlaceSearch? suggestion) {
-                              final place = suggestion;
-
-                              return ListTile(
-                                title: Text(place!.description),
-                              );
-                            },
-                            onSuggestionSelected: (PlaceSearch? suggestion) {
-                              
-                            })*/
+                        label: 'Start',
+                        hint: 'Choose starting point',
+                        prefixIcon: Icon(Icons.looks_one),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.my_location),
+                          onPressed: () {
+                            mapViewController.startAddressController.value
+                                .text = mapViewController.currentAddress.value;
+                            mapViewController.startAddress.value =
+                                mapViewController.currentAddress.value;
+                            print(mapViewController.currentAddress);
+                          },
                         ),
+                        controller:
+                            mapViewController.startAddressController.value,
+                        focusNode: mapViewController.startAddressFocusNode,
+                        width: width,
+                        locationCallback: (String value) {
+                          mapViewController.startAddress.value = value;
+                          //mapViewController.findPlace(value);
+                        })),
                     SizedBox(height: 10),
                     Obx(() => _textField(
                         label: 'Destination',
@@ -212,7 +198,7 @@ class MenuView extends StatelessWidget {
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.red,
+                        primary: Colors.blue.shade300,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),

@@ -162,8 +162,8 @@ class LocationService {
   }
 
   //find a place and make marker
-  Future<bool> makeMarker(String placeName, String findedAddress,
-      GoogleMapController mapController) async {
+  Future<bool> makeMarker(
+      String placeName, GoogleMapController mapController) async {
     final mapViewController = Get.find<MapviewController>();
     List<Location> findedPlacemark = await locationFromAddress(placeName);
     print(
@@ -178,7 +178,7 @@ class LocationService {
         position: LatLng(findedLatitude, findedLongitude),
         infoWindow: InfoWindow(
           title: '$findedCoordinatesString',
-          snippet: findedAddress,
+          snippet: placeName,
         ),
         icon: BitmapDescriptor.defaultMarker,
       );
